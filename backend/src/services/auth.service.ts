@@ -33,7 +33,7 @@ export async function createUser(data: { name: string; email: string; password: 
   return { id: user.id, name: user.name, email: user.email, role: user.role };
 }
 
-export async function bootstrapAdmin(data) {
+export async function bootstrapAdmin(data: { name: string; email: string; password: string }) {
   const count = await prisma.user.count();
   if (count > 0) {
     throw new AppError("Setup already done.", 403);

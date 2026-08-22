@@ -35,7 +35,7 @@ export async function createUserHandler(req: Request, res: Response, next: NextF
   }
 }
 
-export async function bootstrapAdminHandler(req, res, next) {
+export async function bootstrapAdminHandler(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await authService.bootstrapAdmin(req.body);
     res.status(201).json({ success: true, data: user, message: "Admin ban gaya!" });
