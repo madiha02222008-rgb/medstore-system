@@ -34,3 +34,10 @@ export async function createUserHandler(req: Request, res: Response, next: NextF
     next(err);
   }
 }
+
+export async function bootstrapAdminHandler(req, res, next) {
+  try {
+    const user = await authService.bootstrapAdmin(req.body);
+    res.status(201).json({ success: true, data: user, message: "Admin ban gaya!" });
+  } catch (err) { next(err); }
+}

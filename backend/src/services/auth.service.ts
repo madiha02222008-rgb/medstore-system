@@ -32,3 +32,15 @@ export async function createUser(data: { name: string; email: string; password: 
   });
   return { id: user.id, name: user.name, email: user.email, role: user.role };
 }
+
+export async function bootstrapAdmin(data) {
+  const count = await prisma.user.count();
+  if (count > 0) {
+    throw new AppError("Setup already done.", 403);
+  }
+  const passwordHash = await bcrypt.hash(data.password, 10);
+  const user = await prisma.user.create({
+    data: { name: data.name, email: data.email, passwordHash, role: "ADMIN" },
+  });
+  return { id: user.id, name: user.name, email: user.email, role: user.role };
+}
