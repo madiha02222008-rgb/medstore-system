@@ -35,6 +35,13 @@ export async function createUserHandler(req: Request, res: Response, next: NextF
   }
 }
 
+// Sirf ADMIN sabhi users ki list dekh sakta hai
+export async function listUsersHandler(req: Request, res: Response, next: NextFunction) {
+  try {
+    res.json({ success: true, data: await authService.listUsers() });
+  } catch (err) { next(err); }
+}
+
 export async function bootstrapAdminHandler(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await authService.bootstrapAdmin(req.body);

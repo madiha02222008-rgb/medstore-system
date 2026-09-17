@@ -29,6 +29,12 @@ enum SaleStatus {
   CANCELLED
 }
 
+enum OrderStatus {
+  PENDING
+  CONVERTED
+  REJECTED
+}
+
 model User {
   id           String   @id @default(uuid())
   name         String
@@ -41,6 +47,10 @@ model User {
 
   salesCreated    Sale[]     @relation("SaleCreatedBy")
   purchasesCreated Purchase[] @relation("PurchaseCreatedBy")
+
+  // Agar role RETAILER hai, to is User ka apna ek Customer profile hota hai
+  // jisse ye apne orders place karta hai
+  customerProfile Customer?
 }
 
 model Medicine {
@@ -56,6 +66,7 @@ model Medicine {
   updatedAt   DateTime @updatedAt
 
   batches     Batch[]
+  orderItems  OrderItem[]
 }
 
 model Batch {
@@ -93,7 +104,12 @@ model Customer {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
 
-  sales Sale[]
+  // Agar ye customer ek Retailer login bhi hai, to uske User account se link hota hai
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
+
+  sales  Sale[]
+  orders Order[]
 }
 
 model Supplier {
@@ -146,6 +162,7 @@ model Sale {
 
   items    SaleItem[]
   payments Payment[]
+  order    Order?
 }
 
 model SaleItem {
@@ -166,4 +183,28 @@ model Payment {
   amount    Decimal
   mode      String   @default("Cash")
   createdAt DateTime @default(now())
+}
+
+// Retailer jab order place karta hai, wo pehle yahan PENDING banta hai.
+// Admin/Staff use "Bill Banao" (convert to Sale) ya "Reject" kar sakte hain.
+model Order {
+  id         String      @id @default(uuid())
+  customer   Customer    @relation(fields: [customerId], references: [id])
+  customerId String
+  status     OrderStatus @default(PENDING)
+  sale       Sale?       @relation(fields: [saleId], references: [id])
+  saleId     String?     @unique
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    String
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+  medicineId String
+  quantity   Int
 }

@@ -24,6 +24,12 @@ export async function listHandler(req: AuthRequest, res: Response, next: NextFun
   catch (err) { next(err); }
 }
 
+// Ledger page ke liye: sabhi payments ka record
+export async function listPaymentsHandler(req: AuthRequest, res: Response, next: NextFunction) {
+  try { res.json({ success: true, data: await saleService.listAllPayments() }); }
+  catch (err) { next(err); }
+}
+
 const paymentSchema = z.object({
   amount: z.number().positive(),
   mode: z.string().default("Cash"),

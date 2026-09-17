@@ -5,6 +5,7 @@ import medicineRoutes from "./routes/medicine.routes";
 import partyRoutes from "./routes/party.routes";
 import purchaseRoutes from "./routes/purchase.routes";
 import saleRoutes from "./routes/sale.routes";
+import orderRoutes from "./routes/order.routes";
 import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
@@ -20,6 +21,7 @@ app.use("/api/v1/medicines", medicineRoutes);
 app.use("/api/v1", partyRoutes); // /customers, /suppliers
 app.use("/api/v1/purchases", purchaseRoutes);
 app.use("/api/v1/sales", saleRoutes);
+app.use("/api/v1/orders", orderRoutes);
 
 // 404 -- koi galat URL hit kare to
 app.use((req, res) => res.status(404).json({ success: false, message: "Route nahi mila" }));

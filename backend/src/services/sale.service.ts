@@ -72,6 +72,14 @@ export async function listSales() {
   });
 }
 
+// Ledger: sabhi payments ka poora record (kis bill par, kitna, kab)
+export async function listAllPayments() {
+  return prisma.payment.findMany({
+    include: { sale: { include: { customer: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function recordPayment(saleId: string, amount: number, mode: string) {
   return prisma.$transaction(async (tx) => {
     const sale = await tx.sale.findUnique({ where: { id: saleId } });

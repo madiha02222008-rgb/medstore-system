@@ -12,6 +12,11 @@ button { cursor: pointer; border: none; }
 .login-card input { padding: 10px 12px; border: 1.5px solid #DCE7E3; border-radius: 8px; font-size: 14px; }
 .login-note { margin-top: 14px; font-size: 11.5px; color: #5C6E6A; line-height: 1.5; border-top: 1px dashed #DCE7E3; padding-top: 12px; }
 .error-note { background: #FBEBEA; color: #C05A52; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
+.success-note { background: #E8F5E9; color: #2E7D32; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
+.btn-secondary { background: #EEE; color: #333; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+.btn-secondary.small { padding: 6px 12px; font-size: 13px; }
+td.good, .good { color: #2E7D32; font-weight: 600; }
+td.bad, .bad { color: #C05A52; font-weight: 600; }
 
 .btn-primary { background: #0F5E56; color: white; padding: 10px 16px; border-radius: 9px; font-weight: 600; font-size: 13.5px; }
 .btn-primary:hover { background: #0B4A44; }

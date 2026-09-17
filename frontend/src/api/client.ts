@@ -44,4 +44,18 @@ export const api = {
   createSale: (data: any) => apiRequest("/sales", { method: "POST", body: JSON.stringify(data) }),
   recordPayment: (saleId: string, amount: number, mode: string) =>
     apiRequest(`/sales/${saleId}/payments`, { method: "POST", body: JSON.stringify({ amount, mode }) }),
+  getLedger: () => apiRequest("/sales/payments/ledger"),
+
+  // Orders (Retailer <-> Admin/Staff)
+  createOrder: (items: { medicineId: string; quantity: number }[]) =>
+    apiRequest("/orders", { method: "POST", body: JSON.stringify({ items }) }),
+  myOrders: () => apiRequest("/orders/my"),
+  listPendingOrders: () => apiRequest("/orders"),
+  convertOrder: (orderId: string) => apiRequest(`/orders/${orderId}/convert`, { method: "POST" }),
+  rejectOrder: (orderId: string) => apiRequest(`/orders/${orderId}/reject`, { method: "POST" }),
+
+  // Users (Admin only)
+  listUsers: () => apiRequest("/auth/users"),
+  createUser: (data: { name: string; email: string; password: string; role: string }) =>
+    apiRequest("/auth/users", { method: "POST", body: JSON.stringify(data) }),
 };

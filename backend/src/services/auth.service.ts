@@ -30,7 +30,24 @@ export async function createUser(data: { name: string; email: string; password: 
   const user = await prisma.user.create({
     data: { name: data.name, email: data.email, passwordHash, role: data.role as any },
   });
+
+  // RETAILER role ke liye apne aap ek Customer profile bhi bana dete hain,
+  // taaki wo login karke seedha order place kar sake
+  if (data.role === "RETAILER") {
+    await prisma.customer.create({
+      data: { name: data.name, customerType: "Retailer", userId: user.id },
+    });
+  }
+
   return { id: user.id, name: user.name, email: user.email, role: user.role };
+}
+
+export async function listUsers() {
+  const users = await prisma.user.findMany({
+    select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true },
+    orderBy: { createdAt: "desc" },
+  });
+  return users;
 }
 
 export async function bootstrapAdmin(data: { name: string; email: string; password: string }) {
