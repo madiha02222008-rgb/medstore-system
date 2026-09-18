@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import * as authService from "../services/auth.service";
+import { AuthRequest } from "../middleware/auth";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -39,6 +40,21 @@ export async function createUserHandler(req: Request, res: Response, next: NextF
 export async function listUsersHandler(req: Request, res: Response, next: NextFunction) {
   try {
     res.json({ success: true, data: await authService.listUsers() });
+  } catch (err) { next(err); }
+}
+
+// ADMIN kisi user ko deactivate kar sakta hai (delete nahi, taaki purana data safe rahe)
+export async function deactivateUserHandler(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const user = await authService.deactivateUser(req.params.id, req.user!.userId);
+    res.json({ success: true, data: user, message: "User deactivate ho gaya" });
+  } catch (err) { next(err); }
+}
+
+export async function reactivateUserHandler(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const user = await authService.reactivateUser(req.params.id);
+    res.json({ success: true, data: user, message: "User dobara activate ho gaya" });
   } catch (err) { next(err); }
 }
 
