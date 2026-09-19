@@ -50,6 +50,33 @@ export async function listUsers() {
   return users;
 }
 
+// User ko permanently delete nahi karte (purane bills/purchases se linked ho sakta hai),
+// balki deactivate kar dete hain — wo login nahi kar payega
+export async function deactivateUser(userId: string, requestingUserId: string) {
+  if (userId === requestingUserId) {
+    throw new AppError("Aap khud ko deactivate nahi kar sakte", 400);
+  }
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError("User nahi mila", 404);
+
+  return prisma.user.update({
+    where: { id: userId },
+    data: { isActive: false },
+    select: { id: true, name: true, email: true, role: true, isActive: true },
+  });
+}
+
+export async function reactivateUser(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError("User nahi mila", 404);
+
+  return prisma.user.update({
+    where: { id: userId },
+    data: { isActive: true },
+    select: { id: true, name: true, email: true, role: true, isActive: true },
+  });
+}
+
 export async function bootstrapAdmin(data: { name: string; email: string; password: string }) {
   const count = await prisma.user.count();
   if (count > 0) {
