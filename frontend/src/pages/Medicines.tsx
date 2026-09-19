@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
-import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Medicines() {
   const { user } = useAuth();
-  const { t } = useLanguage();
   const [medicines, setMedicines] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", category: "", unit: "", mrp: "", rate: "", lowStockAt: "10" });
@@ -33,26 +31,26 @@ export default function Medicines() {
   return (
     <div>
       <div className="page-head">
-        <h1>{t("medicinesTitle")}</h1>
-        {canEdit && <button className="btn-primary" onClick={() => setShowForm((s) => !s)}>{t("newMedicine")}</button>}
+        <h1>Medicines &amp; Stock</h1>
+        {canEdit && <button className="btn-primary" onClick={() => setShowForm((s) => !s)}>+ Naya Medicine</button>}
       </div>
       {error && <div className="error-note">{error}</div>}
       {showForm && (
         <div className="card form-card">
           <div className="form-grid">
-            <input placeholder={t("name")} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <input placeholder={t("category")} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
-            <input placeholder={t("unit")} value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} />
-            <input placeholder={t("mrp")} type="number" value={form.mrp} onChange={(e) => setForm({ ...form, mrp: e.target.value })} />
-            <input placeholder={t("wholesaleRate")} type="number" value={form.rate} onChange={(e) => setForm({ ...form, rate: e.target.value })} />
-            <input placeholder={t("lowStockAlert")} type="number" value={form.lowStockAt} onChange={(e) => setForm({ ...form, lowStockAt: e.target.value })} />
+            <input placeholder="Naam" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <input placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+            <input placeholder="Unit" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} />
+            <input placeholder="MRP" type="number" value={form.mrp} onChange={(e) => setForm({ ...form, mrp: e.target.value })} />
+            <input placeholder="Wholesale Rate" type="number" value={form.rate} onChange={(e) => setForm({ ...form, rate: e.target.value })} />
+            <input placeholder="Low stock alert" type="number" value={form.lowStockAt} onChange={(e) => setForm({ ...form, lowStockAt: e.target.value })} />
           </div>
-          <button className="btn-primary" onClick={submit}>{t("addMedicine")}</button>
+          <button className="btn-primary" onClick={submit}>Add Medicine</button>
         </div>
       )}
       <div className="table-wrap">
         <table>
-          <thead><tr><th>{t("name")}</th><th>{t("category")}</th><th>{t("unit")}</th><th>{t("purchaseRate")}</th><th>{t("mrp")}</th><th>{t("currentStock")}</th></tr></thead>
+          <thead><tr><th>Name</th><th>Category</th><th>Unit</th><th>Rate</th><th>MRP</th><th>Total Stock</th></tr></thead>
           <tbody>
             {medicines.map((m) => {
               const stock = (m.batches || []).reduce((s: number, b: any) => s + b.quantity, 0);

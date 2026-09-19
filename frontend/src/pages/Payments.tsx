@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
-import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Payments() {
-  const { t } = useLanguage();
   const [sales, setSales] = useState<any[]>([]);
   const [outstanding, setOutstanding] = useState<any[]>([]);
   const [amounts, setAmounts] = useState<Record<string, string>>({});
@@ -29,24 +27,24 @@ export default function Payments() {
 
   return (
     <div>
-      <h1>{t("paymentsTitle")}</h1>
+      <h1>Payments</h1>
       {error && <div className="error-note">{error}</div>}
 
       <div className="card">
-        <h3>{t("duePayments")}</h3>
+        <h3>Baaki Payments</h3>
         {due.map((s) => (
           <div className="list-row" key={s.id}>
-            <span>{s.customer?.name} · {t("balance")} ₹{(Number(s.total) - Number(s.paid)).toLocaleString("en-IN")}</span>
+            <span>{s.customer?.name} · Balance ₹{(Number(s.total) - Number(s.paid)).toLocaleString("en-IN")}</span>
             <span className="pay-input">
-              <input type="number" placeholder={t("amount")} value={amounts[s.id] || ""} onChange={(e) => setAmounts({ ...amounts, [s.id]: e.target.value })} />
-              <button className="btn-primary small" onClick={() => pay(s.id)}>{t("markPaid")}</button>
+              <input type="number" placeholder="Amount" value={amounts[s.id] || ""} onChange={(e) => setAmounts({ ...amounts, [s.id]: e.target.value })} />
+              <button className="btn-primary small" onClick={() => pay(s.id)}>Mark Paid</button>
             </span>
           </div>
         ))}
       </div>
 
       <div className="card">
-        <h3>{t("outstandingByCustomer")}</h3>
+        <h3>Udhaar Summary (Customer-wise)</h3>
         {outstanding.map((o, i) => (
           <div className="list-row" key={i}><span>{o.name}</span><span className="bad">₹{o.balance.toLocaleString("en-IN")}</span></div>
         ))}

@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
-import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Ledger() {
-  const { t } = useLanguage();
   const [payments, setPayments] = useState<any[]>([]);
   const [error, setError] = useState("");
 
@@ -13,12 +11,12 @@ export default function Ledger() {
 
   return (
     <div>
-      <h1>{t("ledgerTitle")}</h1>
+      <h1>Ledger</h1>
       {error && <div className="error-note">{error}</div>}
 
       <div className="table-wrap">
         <table>
-          <thead><tr><th>{t("customer")}</th><th>{t("amount")}</th><th>{t("mode")}</th><th>{t("billTotal")}</th><th>{t("date")}</th></tr></thead>
+          <thead><tr><th>Customer</th><th>Amount</th><th>Mode</th><th>Bill Total</th><th>Date</th></tr></thead>
           <tbody>
             {payments.map((p) => (
               <tr key={p.id}>

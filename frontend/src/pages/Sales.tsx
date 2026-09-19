@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
-import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Sales() {
-  const { t } = useLanguage();
-  const statusLabel: Record<string, string> = {
-    PAID: t("paid"), UNPAID: t("unpaid"), PARTIAL: t("partial"), CANCELLED: t("statusRejected"),
-  };
   const [sales, setSales] = useState<any[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [medicines, setMedicines] = useState<any[]>([]);
@@ -39,19 +34,19 @@ export default function Sales() {
 
   return (
     <div>
-      <h1>{t("salesTitle")}</h1>
+      <h1>Sales / Billing</h1>
       {error && <div className="error-note">{error}</div>}
 
       <div className="split">
         <div className="card">
-          <h3>{t("medicine")}</h3>
+          <h3>Medicines</h3>
           {medicines.map((m) => {
             const stock = (m.batches || []).reduce((s: number, b: any) => s + b.quantity, 0);
             return (
               <div className="product-row" key={m.id}>
                 <div>
                   <div className="product-name">{m.name}</div>
-                  <div className="product-meta">{t("currentStock")}: {stock} · ₹{Number(m.mrp)}/unit</div>
+                  <div className="product-meta">Stock: {stock} · ₹{Number(m.mrp)}/unit</div>
                 </div>
                 <div className="qty-control">
                   <button onClick={() => setQty(m.id, (cart[m.id] || 0) - 1)}>−</button>
@@ -64,26 +59,26 @@ export default function Sales() {
         </div>
 
         <div className="card">
-          <h3>{t("bill")}</h3>
+          <h3>Bill</h3>
           <select value={customerId} onChange={(e) => setCustomerId(e.target.value)}>
-            <option value="">{t("chooseCustomer")}</option>
+            <option value="">Customer chuno</option>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
-          <button className="btn-primary full" style={{ marginTop: 12 }} onClick={submit}>{t("generateBill")}</button>
+          <button className="btn-primary full" style={{ marginTop: 12 }} onClick={submit}>Bill Banao</button>
         </div>
       </div>
 
-      <h3 style={{ marginTop: 20 }}>{t("recentBills")}</h3>
+      <h3 style={{ marginTop: 20 }}>Recent Bills</h3>
       <div className="table-wrap">
         <table>
-          <thead><tr><th>{t("customer")}</th><th>{t("total")}</th><th>{t("paid")}</th><th>{t("status")}</th><th>{t("date")}</th></tr></thead>
+          <thead><tr><th>Customer</th><th>Total</th><th>Paid</th><th>Status</th><th>Date</th></tr></thead>
           <tbody>
             {sales.map((s) => (
               <tr key={s.id}>
                 <td>{s.customer?.name}</td>
                 <td>₹{Number(s.total).toLocaleString("en-IN")}</td>
                 <td>₹{Number(s.paid).toLocaleString("en-IN")}</td>
-                <td>{statusLabel[s.status] || s.status}</td>
+                <td>{s.status}</td>
                 <td>{new Date(s.createdAt).toLocaleDateString("en-IN")}</td>
               </tr>
             ))}

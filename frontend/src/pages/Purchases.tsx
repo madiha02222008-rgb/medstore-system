@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
-import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Purchases() {
-  const { t } = useLanguage();
   const [purchases, setPurchases] = useState<any[]>([]);
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [medicines, setMedicines] = useState<any[]>([]);
@@ -37,28 +35,28 @@ export default function Purchases() {
 
   return (
     <div>
-      <h1>{t("purchasesTitle")}</h1>
+      <h1>Purchases</h1>
       {error && <div className="error-note">{error}</div>}
 
       <div className="card form-card">
-        <h3>{t("newPurchase")}</h3>
+        <h3>Naya Purchase</h3>
         <select value={supplierId} onChange={(e) => setSupplierId(e.target.value)}>
-          <option value="">{t("chooseSupplier")}</option>
+          <option value="">Supplier chuno</option>
           {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
 
         <div className="form-grid" style={{ marginTop: 10 }}>
           <select value={itemForm.medicineId} onChange={(e) => setItemForm({ ...itemForm, medicineId: e.target.value })}>
-            <option value="">{t("chooseMedicine")}</option>
+            <option value="">Medicine chuno</option>
             {medicines.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
           </select>
-          <input placeholder={t("batchNumber")} value={itemForm.batchNumber} onChange={(e) => setItemForm({ ...itemForm, batchNumber: e.target.value })} />
-          <input placeholder={t("expiryDatePlaceholder")} value={itemForm.expiryDate} onChange={(e) => setItemForm({ ...itemForm, expiryDate: e.target.value })} />
-          <input placeholder={t("quantity")} type="number" value={itemForm.quantity} onChange={(e) => setItemForm({ ...itemForm, quantity: e.target.value })} />
-          <input placeholder={t("purchaseRate")} type="number" value={itemForm.rate} onChange={(e) => setItemForm({ ...itemForm, rate: e.target.value })} />
-          <input placeholder={t("mrp")} type="number" value={itemForm.mrp} onChange={(e) => setItemForm({ ...itemForm, mrp: e.target.value })} />
+          <input placeholder="Batch Number" value={itemForm.batchNumber} onChange={(e) => setItemForm({ ...itemForm, batchNumber: e.target.value })} />
+          <input placeholder="Expiry (YYYY-MM-DD)" value={itemForm.expiryDate} onChange={(e) => setItemForm({ ...itemForm, expiryDate: e.target.value })} />
+          <input placeholder="Quantity" type="number" value={itemForm.quantity} onChange={(e) => setItemForm({ ...itemForm, quantity: e.target.value })} />
+          <input placeholder="Purchase Rate" type="number" value={itemForm.rate} onChange={(e) => setItemForm({ ...itemForm, rate: e.target.value })} />
+          <input placeholder="MRP" type="number" value={itemForm.mrp} onChange={(e) => setItemForm({ ...itemForm, mrp: e.target.value })} />
         </div>
-        <button className="btn-ghost" style={{ marginTop: 8 }} onClick={addItem}>+ {t("addItem")}</button>
+        <button className="btn-ghost" style={{ marginTop: 8 }} onClick={addItem}>+ Item jodo</button>
 
         {items.length > 0 && (
           <div style={{ marginTop: 12 }}>
@@ -72,13 +70,13 @@ export default function Purchases() {
         )}
 
         <button className="btn-primary full" disabled={!supplierId || items.length === 0} onClick={submitPurchase} style={{ marginTop: 12 }}>
-          {t("savePurchase")}
+          Purchase Save Karo
         </button>
       </div>
 
       <div className="table-wrap">
         <table>
-          <thead><tr><th>{t("supplier")}</th><th>{t("invoiceNo")}</th><th>{t("total")}</th><th>{t("date")}</th></tr></thead>
+          <thead><tr><th>Supplier</th><th>Invoice</th><th>Total</th><th>Date</th></tr></thead>
           <tbody>
             {purchases.map((p) => (
               <tr key={p.id}>

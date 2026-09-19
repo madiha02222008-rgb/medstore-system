@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate } from "react-router-dom";
 import { useAuth, AuthProvider } from "./context/AuthContext";
-import { LanguageProvider, useLanguage } from "./i18n/LanguageContext";
 import Login from "./pages/Login";
 import Medicines from "./pages/Medicines";
 import Sales from "./pages/Sales";
@@ -12,50 +11,32 @@ import Users from "./pages/Users";
 import Ledger from "./pages/Ledger";
 import "./styles.css";
 
-function LanguageSwitch() {
-  const { lang, setLang } = useLanguage();
-  return (
-    <div className="lang-switch" role="group" aria-label="Language">
-      <button className={lang === "en" ? "lang-btn active" : "lang-btn"} onClick={() => setLang("en")}>EN</button>
-      <button className={lang === "hi" ? "lang-btn active" : "lang-btn"} onClick={() => setLang("hi")}>हिं</button>
-    </div>
-  );
-}
-
 function Shell({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
-  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const navByRole: Record<string, { to: string; label: string }[]> = {
     ADMIN: [
-      { to: "/medicines", label: t("navMedicines") },
-      { to: "/purchases", label: t("navPurchases") },
-      { to: "/orders", label: t("navOrders") },
-      { to: "/sales", label: t("navSales") },
-      { to: "/parties", label: t("navParties") },
-      { to: "/payments", label: t("navPayments") },
-      { to: "/users", label: t("navUsers") },
+      { to: "/medicines", label: "Medicines & Stock" },
+      { to: "/purchases", label: "Purchases" },
+      { to: "/orders", label: "Orders" },
+      { to: "/sales", label: "Sales" },
+      { to: "/parties", label: "Customers & Suppliers" },
+      { to: "/payments", label: "Payments" },
+      { to: "/users", label: "Users" },
     ],
     STAFF: [
-      { to: "/medicines", label: t("navStock") },
-      { to: "/purchases", label: t("navPurchases") },
-      { to: "/orders", label: t("navOrders") },
-      { to: "/sales", label: t("navNewBill") },
+      { to: "/medicines", label: "Stock" },
+      { to: "/purchases", label: "Purchases" },
+      { to: "/orders", label: "Orders" },
+      { to: "/sales", label: "New Bill" },
     ],
-    RETAILER: [{ to: "/orders", label: t("navPlaceOrder") }],
+    RETAILER: [{ to: "/orders", label: "Order Karo" }],
     ACCOUNTANT: [
-      { to: "/sales", label: t("navBills") },
-      { to: "/payments", label: t("navPaymentsUdhaar") },
-      { to: "/ledger", label: t("navLedger") },
+      { to: "/sales", label: "Bills" },
+      { to: "/payments", label: "Payments & Udhaar" },
+      { to: "/ledger", label: "Ledger" },
     ],
-  };
-
-  const roleLabels: Record<string, string> = {
-    ADMIN: t("roleAdmin"),
-    STAFF: t("roleStaff"),
-    RETAILER: t("roleRetailer"),
-    ACCOUNTANT: t("roleAccountant"),
   };
 
   const links = user ? navByRole[user.role] || [] : [];
@@ -63,10 +44,10 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="shell">
       <aside className="sidebar">
-        <div className="brand">{t("brandShort")}</div>
+        <div className="brand">MedStock</div>
         {user && (
           <div className="who">
-            <div className="who-role">{roleLabels[user.role] || user.role}</div>
+            <div className="who-role">{user.role}</div>
             <div className="who-name">{user.name}</div>
           </div>
         )}
@@ -75,10 +56,9 @@ function Shell({ children }: { children: React.ReactNode }) {
             <Link key={l.to} to={l.to} className="nav-item">{l.label}</Link>
           ))}
         </nav>
-        <LanguageSwitch />
         {user && (
           <button className="nav-item logout" onClick={() => { logout(); navigate("/login"); }}>
-            {t("logout")}
+            Logout
           </button>
         )}
       </aside>
@@ -114,12 +94,10 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </AuthProvider>
-    </LanguageProvider>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

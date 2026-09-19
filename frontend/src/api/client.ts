@@ -58,6 +58,4 @@ export const api = {
   listUsers: () => apiRequest("/auth/users"),
   createUser: (data: { name: string; email: string; password: string; role: string }) =>
     apiRequest("/auth/users", { method: "POST", body: JSON.stringify(data) }),
-  deactivateUser: (id: string) => apiRequest(`/auth/users/${id}/deactivate`, { method: "POST" }),
-  reactivateUser: (id: string) => apiRequest(`/auth/users/${id}/reactivate`, { method: "POST" }),
 };
